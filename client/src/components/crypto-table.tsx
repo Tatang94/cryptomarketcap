@@ -31,7 +31,7 @@ export function CryptoTable() {
   const itemsPerPage = 50;
 
   const { data: tickers, isLoading, error, refetch } = useQuery<Ticker[]>({
-    queryKey: ["/api/tickers", ((currentPage - 1) * itemsPerPage + 1).toString(), itemsPerPage.toString()],
+    queryKey: [`/api/tickers?start=${((currentPage - 1) * itemsPerPage + 1)}&limit=${itemsPerPage}`],
     refetchInterval: 30000, // Refresh every 30 seconds
     retry: 3, // Retry failed requests 3 times
     retryDelay: 1000, // Wait 1 second between retries
