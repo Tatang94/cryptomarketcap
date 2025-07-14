@@ -25,7 +25,7 @@ export function transformTickerToTableRow(ticker: Ticker): CryptoTableRow {
     change24h: ticker.quotes.USD.percent_change_24h,
     marketCap: ticker.quotes.USD.market_cap,
     volume24h: ticker.quotes.USD.volume_24h,
-    circulatingSupply: ticker.circulating_supply,
+    circulatingSupply: ticker.total_supply, // Use total_supply as circulating supply
     maxSupply: ticker.max_supply || undefined,
     lastUpdated: ticker.last_updated,
   };

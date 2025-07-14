@@ -56,7 +56,6 @@ export const tickerSchema = z.object({
   name: z.string(),
   symbol: z.string(),
   rank: z.number(),
-  circulating_supply: z.number(),
   total_supply: z.number(),
   max_supply: z.number().nullable(),
   beta_value: z.number(),
