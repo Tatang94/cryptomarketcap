@@ -27,12 +27,26 @@ import {
 export function CryptoTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'rank', direction: 'asc' });
+  const [isRefetching, setIsRefetching] = useState(false);
   const itemsPerPage = 50;
 
   const { data: tickers, isLoading, error, refetch } = useQuery<Ticker[]>({
     queryKey: ["/api/tickers", ((currentPage - 1) * itemsPerPage + 1).toString(), itemsPerPage.toString()],
     refetchInterval: 30000, // Refresh every 30 seconds
+    retry: 3, // Retry failed requests 3 times
+    retryDelay: 1000, // Wait 1 second between retries
   });
+
+  const handleRefetch = async () => {
+    setIsRefetching(true);
+    try {
+      await refetch();
+    } catch (error) {
+      console.error('Refetch failed:', error);
+    } finally {
+      setIsRefetching(false);
+    }
+  };
 
   const tableData = useMemo(() => {
     if (!tickers) return [];
@@ -103,20 +117,36 @@ export function CryptoTable() {
 
   if (error) {
     return (
-      <Alert className="mt-6">
-        <AlertDescription>
-          Unable to load cryptocurrency data. Please try again later.
-          <Button 
-            onClick={() => refetch()} 
-            variant="outline" 
-            size="sm" 
-            className="ml-4"
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Retry
-          </Button>
-        </AlertDescription>
-      </Alert>
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Harga Cryptocurrency Hari Ini (berdasarkan Market Cap)
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+              Semua harga dalam Rupiah (IDR) - Data real-time dari CoinPaprika
+            </p>
+          </div>
+        </div>
+        
+        <Alert className="border-red-200 bg-red-50 dark:bg-red-900/20 dark:border-red-800">
+          <AlertDescription className="text-red-800 dark:text-red-200">
+            <div className="flex items-center justify-between">
+              <span>Tidak dapat memuat data cryptocurrency. Silakan coba lagi.</span>
+              <Button 
+                onClick={handleRefetch} 
+                variant="outline" 
+                size="sm" 
+                disabled={isRefetching}
+                className="ml-4 border-red-300 hover:bg-red-100 dark:border-red-700 dark:hover:bg-red-800"
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${isRefetching ? 'animate-spin' : ''}`} />
+                {isRefetching ? 'Memuat...' : 'Coba Lagi'}
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      </div>
     );
   }
 
@@ -133,9 +163,9 @@ export function CryptoTable() {
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <Button onClick={() => refetch()} variant="outline" size="sm">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
+          <Button onClick={handleRefetch} variant="outline" size="sm" disabled={isRefetching}>
+            <RefreshCw className={`h-4 w-4 mr-2 ${isRefetching ? 'animate-spin' : ''}`} />
+            {isRefetching ? 'Memuat...' : 'Refresh'}
           </Button>
           <Button variant="outline" size="sm">
             <Filter className="h-4 w-4 mr-2" />
