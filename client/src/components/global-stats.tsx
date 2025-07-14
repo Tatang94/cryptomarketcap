@@ -84,24 +84,24 @@ export function GlobalStatsSection() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <StatCard
             icon={TrendingUp}
-            label="Market Cap"
+            label="Market Cap (IDR)"
             value={formatCurrency(stats.marketCap)}
             change={stats.marketCapChange24h}
           />
           <StatCard
             icon={Activity}
-            label="24h Volume"
+            label="Volume 24h (IDR)"
             value={formatCurrency(stats.volume24h)}
             change={stats.volumeChange24h}
           />
           <StatCard
             icon={Bitcoin}
-            label="Bitcoin Dominance"
+            label="Dominasi Bitcoin"
             value={`${stats.bitcoinDominance.toFixed(1)}%`}
           />
           <StatCard
             icon={TrendingUp}
-            label="Active Cryptocurrencies"
+            label="Cryptocurrency Aktif"
             value={stats.activeCryptos.toLocaleString()}
           />
         </div>

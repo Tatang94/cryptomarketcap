@@ -39,6 +39,9 @@ export function Header() {
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 CryptoMarket
               </h1>
+              <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                IDR
+              </span>
             </div>
             <nav className="hidden md:flex space-x-6">
               {navigation.map((item) => (
@@ -59,7 +62,7 @@ export function Header() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Search cryptocurrencies..."
+                placeholder="Cari cryptocurrency..."
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 className="w-80 pl-10 bg-gray-50 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
@@ -93,7 +96,7 @@ export function Header() {
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
                       type="text"
-                      placeholder="Search cryptocurrencies..."
+                      placeholder="Cari cryptocurrency..."
                       value={searchValue}
                       onChange={(e) => setSearchValue(e.target.value)}
                       className="pl-10"

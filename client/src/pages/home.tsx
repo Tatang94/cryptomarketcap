@@ -14,7 +14,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-8">
           <div className="text-center">
             <p className="text-gray-600 dark:text-gray-400 mb-2">
-              Powered by{" "}
+              Data disediakan oleh{" "}
               <a 
                 href="https://coinpaprika.com" 
                 className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
@@ -25,7 +25,7 @@ export default function Home() {
               </a>
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Real-time cryptocurrency data and market intelligence
+              Data cryptocurrency real-time dengan harga dalam Rupiah (IDR)
             </p>
           </div>
         </div>

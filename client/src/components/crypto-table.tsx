@@ -30,7 +30,7 @@ export function CryptoTable() {
   const itemsPerPage = 50;
 
   const { data: tickers, isLoading, error, refetch } = useQuery<Ticker[]>({
-    queryKey: ["/api/tickers", { start: ((currentPage - 1) * itemsPerPage + 1).toString(), limit: itemsPerPage.toString() }],
+    queryKey: ["/api/tickers", ((currentPage - 1) * itemsPerPage + 1).toString(), itemsPerPage.toString()],
     refetchInterval: 30000, // Refresh every 30 seconds
   });
 
@@ -126,10 +126,10 @@ export function CryptoTable() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Today's Cryptocurrency Prices by Market Cap
+            Harga Cryptocurrency Hari Ini (berdasarkan Market Cap)
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            The global cryptocurrency market cap today is {formatCurrency(2400000000000)}
+            Semua harga dalam Rupiah (IDR) - Data real-time dari CoinPaprika
           </p>
         </div>
         <div className="flex items-center space-x-3">
@@ -157,19 +157,19 @@ export function CryptoTable() {
                   <SortableHeader label="Name" sortKey="name" />
                 </TableHead>
                 <TableHead className="text-right">
-                  <SortableHeader label="Price" sortKey="price" className="ml-auto" />
+                  <SortableHeader label="Harga (IDR)" sortKey="price" className="ml-auto" />
                 </TableHead>
                 <TableHead className="text-right">
                   <SortableHeader label="24h %" sortKey="change24h" className="ml-auto" />
                 </TableHead>
                 <TableHead className="text-right hidden md:table-cell">
-                  <SortableHeader label="Market Cap" sortKey="marketCap" className="ml-auto" />
+                  <SortableHeader label="Market Cap (IDR)" sortKey="marketCap" className="ml-auto" />
                 </TableHead>
                 <TableHead className="text-right hidden lg:table-cell">
-                  <SortableHeader label="Volume (24h)" sortKey="volume24h" className="ml-auto" />
+                  <SortableHeader label="Volume 24h (IDR)" sortKey="volume24h" className="ml-auto" />
                 </TableHead>
                 <TableHead className="text-right hidden xl:table-cell">
-                  <SortableHeader label="Circulating Supply" sortKey="circulatingSupply" className="ml-auto" />
+                  <SortableHeader label="Suplai Beredar" sortKey="circulatingSupply" className="ml-auto" />
                 </TableHead>
               </TableRow>
             </TableHeader>

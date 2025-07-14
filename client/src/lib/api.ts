@@ -31,13 +31,18 @@ export function transformTickerToTableRow(ticker: Ticker): CryptoTableRow {
   };
 }
 
-// Format currency values
+// Exchange rate USD to IDR (Indonesian Rupiah)
+const USD_TO_IDR_RATE = 15800; // Approximate rate, ideally this should come from a real-time API
+
+// Format currency values in Indonesian Rupiah
 export function formatCurrency(value: number): string {
-  if (value >= 1e12) return '$' + (value / 1e12).toFixed(2) + 'T';
-  if (value >= 1e9) return '$' + (value / 1e9).toFixed(2) + 'B';
-  if (value >= 1e6) return '$' + (value / 1e6).toFixed(2) + 'M';
-  if (value >= 1e3) return '$' + (value / 1e3).toFixed(2) + 'K';
-  return '$' + value.toFixed(2);
+  const idrValue = value * USD_TO_IDR_RATE;
+  
+  if (idrValue >= 1e12) return 'Rp' + (idrValue / 1e12).toFixed(2) + 'T';
+  if (idrValue >= 1e9) return 'Rp' + (idrValue / 1e9).toFixed(2) + 'B';
+  if (idrValue >= 1e6) return 'Rp' + (idrValue / 1e6).toFixed(2) + 'M';
+  if (idrValue >= 1e3) return 'Rp' + (idrValue / 1e3).toFixed(2) + 'K';
+  return 'Rp' + idrValue.toLocaleString('id-ID');
 }
 
 // Format large numbers
