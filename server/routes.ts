@@ -79,8 +79,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get tickers (price data) for cryptocurrencies
   app.get("/api/tickers", async (req, res) => {
     try {
-      const { start = "1", limit = "100" } = req.query;
-      const data = await fetchFromCoinPaprika(`/tickers?start=${start}&limit=${limit}`);
+      const { start = "1", limit = "1000" } = req.query;
+      // Ensure limit doesn't exceed 1000 (CoinPaprika max)
+      const maxLimit = Math.min(parseInt(limit as string) || 1000, 1000);
+      const data = await fetchFromCoinPaprika(`/tickers?start=${start}&limit=${maxLimit}`);
       const validatedData = z.array(tickerSchema).parse(data);
       res.json(validatedData);
     } catch (error) {

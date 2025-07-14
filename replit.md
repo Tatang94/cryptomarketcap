@@ -7,6 +7,9 @@ This is a full-stack cryptocurrency market data dashboard built with React, Type
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Currency display: Indonesian Rupiah (IDR) with full amounts (no abbreviations like K, M, B, T)
+Language: Indonesian interface
+Data requirements: Show thousands of up-to-date cryptocurrencies
 
 ## System Architecture
 
