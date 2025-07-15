@@ -28,7 +28,7 @@ export function CryptoTable() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: 'rank', direction: 'asc' });
   const [isRefetching, setIsRefetching] = useState(false);
-  const itemsPerPage = 100;
+  const itemsPerPage = 200;
 
   const { data: tickers, isLoading, error, refetch } = useQuery<Ticker[]>({
     queryKey: [`/api/tickers?start=${((currentPage - 1) * itemsPerPage + 1)}&limit=${itemsPerPage}`],
@@ -171,11 +171,11 @@ export function CryptoTable() {
             Harga Cryptocurrency Hari Ini (berdasarkan Market Cap)
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Semua harga dalam Rupiah (IDR) - Data real-time dari CoinPaprika
+            Semua harga dalam Rupiah (IDR) - Data real-time
           </p>
           {tickers && (
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              Menampilkan {tickers.length} cryptocurrency (Halaman {currentPage} dari 50)
+              Menampilkan {tickers.length} cryptocurrency (Halaman {currentPage} dari 25)
             </p>
           )}
         </div>
@@ -293,13 +293,13 @@ export function CryptoTable() {
           Previous
         </Button>
         <span className="text-gray-600 dark:text-gray-400">
-          Page {currentPage} of 50
+          Page {currentPage} of 25
         </span>
         <Button
           variant="outline"
           size="sm"
           onClick={() => setCurrentPage(prev => prev + 1)}
-          disabled={currentPage >= 50}
+          disabled={currentPage >= 25}
         >
           Next
           <ChevronRight className="h-4 w-4 ml-2" />
