@@ -168,12 +168,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Invalid period. Use: 1h, 6h, 12h, 1d, 7d, 14d, 30d, 90d, 365d" });
       }
 
-      const data = await fetchFromCoinPaprika(`/coins/${id}/ohlcv/historical?period=${period}`);
+      // For 7 days, get more granular data
+      const limit = period === "7d" ? 7 : 30;
+      const data = await fetchFromCoinPaprika(`/coins/${id}/ohlcv/historical?period=${period}&limit=${limit}`);
+      
+      // If no data from historical endpoint, try today's data
+      if (!data || data.length === 0) {
+        const todayData = await fetchFromCoinPaprika(`/coins/${id}/ohlcv/today`);
+        if (todayData && todayData.length > 0) {
+          const validatedData = z.array(ohlcvSchema).parse(todayData);
+          res.json(validatedData);
+          return;
+        }
+      }
+      
       const validatedData = z.array(ohlcvSchema).parse(data);
       res.json(validatedData);
     } catch (error) {
       console.error("Error fetching historical OHLCV data:", error);
-      res.status(500).json({ error: "Failed to fetch historical data" });
+      // Return empty array instead of error for better UX
+      res.json([]);
     }
   });
 

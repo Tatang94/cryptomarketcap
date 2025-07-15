@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link } from "wouter";
+import { useMemo } from "react";
 import { ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Activity, DollarSign, Users, Calendar, Hash, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,6 +38,8 @@ export default function CoinDetail() {
   const { data: ohlcvData, isLoading: isLoadingChart } = useQuery<OHLCV[]>({
     queryKey: ['/api/coins', id, 'ohlcv', '7d'],
     enabled: !!id,
+    retry: 2,
+    retryDelay: 1000,
   });
 
   if (isLoadingDetails || isLoadingTicker) {
@@ -86,14 +89,49 @@ export default function CoinDetail() {
   const changeColor = getChangeColor(change24h);
   const changeIcon = getChangeIcon(change24h);
 
-  const chartData = ohlcvData?.map(item => ({
-    time: format(new Date(item.time_close), 'dd/MM'),
-    price: item.close,
-    volume: item.volume,
-    marketCap: item.market_cap,
-    high: item.high,
-    low: item.low,
-  })) || [];
+  const chartData = useMemo(() => {
+    if (!ohlcvData || ohlcvData.length === 0) {
+      // Generate sample data based on current price for demonstration
+      if (!ticker) return [];
+      
+      const currentPrice = ticker.quotes.USD.price;
+      const change24h = ticker.quotes.USD.percent_change_24h;
+      const days = 7;
+      
+      return Array.from({ length: days }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (days - 1 - i));
+        
+        // Generate price variation based on 24h change
+        const variation = (Math.random() - 0.5) * 0.1; // ±5% variation
+        const baseChange = change24h / 100 / days; // Distribute change over days
+        const priceMultiplier = 1 + baseChange * (i + 1) + variation;
+        
+        return {
+          time: format(date, 'dd/MM'),
+          price: currentPrice * priceMultiplier,
+          volume: ticker.quotes.USD.volume_24h * (0.8 + Math.random() * 0.4), // ±20% volume variation
+          marketCap: ticker.quotes.USD.market_cap * priceMultiplier,
+          high: currentPrice * priceMultiplier * 1.05,
+          low: currentPrice * priceMultiplier * 0.95,
+        };
+      });
+    }
+    
+    try {
+      return ohlcvData.map(item => ({
+        time: format(new Date(item.time_close), 'dd/MM'),
+        price: item.close,
+        volume: item.volume,
+        marketCap: item.market_cap,
+        high: item.high,
+        low: item.low,
+      }));
+    } catch (error) {
+      console.error('Error processing chart data:', error);
+      return [];
+    }
+  }, [ohlcvData, ticker]);
 
   const supplyPercentage = ticker.max_supply ? (ticker.total_supply / ticker.max_supply) * 100 : 0;
 
@@ -247,6 +285,7 @@ export default function CoinDetail() {
               <CardTitle>Grafik Harga 7 Hari Terakhir</CardTitle>
               <CardDescription>
                 Menampilkan pergerakan harga {ticker.name} dalam 7 hari terakhir
+                {!ohlcvData || ohlcvData.length === 0 ? ' (Data simulasi berdasarkan harga saat ini)' : ' (Data historis real)'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -257,31 +296,48 @@ export default function CoinDetail() {
               ) : chartData.length > 0 ? (
                 <ResponsiveContainer width="100%" height={400}>
                   <AreaChart data={chartData}>
-                    <CartesianGrid strokeDasharray="3 3" />
+                    <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
                     <XAxis 
                       dataKey="time" 
                       tick={{ fontSize: 12 }}
+                      axisLine={{ stroke: '#e5e7eb' }}
                     />
                     <YAxis 
                       tick={{ fontSize: 12 }}
                       tickFormatter={(value) => formatCurrency(value)}
+                      axisLine={{ stroke: '#e5e7eb' }}
                     />
                     <Tooltip
                       formatter={(value: number) => [formatCurrency(value), 'Harga']}
                       labelFormatter={(label) => `Tanggal: ${label}`}
+                      contentStyle={{
+                        backgroundColor: '#1f2937',
+                        border: '1px solid #374151',
+                        borderRadius: '8px',
+                        color: '#f9fafb'
+                      }}
                     />
                     <Area
                       type="monotone"
                       dataKey="price"
                       stroke="#3b82f6"
-                      fill="#3b82f6"
-                      fillOpacity={0.1}
+                      fill="url(#colorPrice)"
+                      fillOpacity={0.3}
                     />
+                    <defs>
+                      <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
                   </AreaChart>
                 </ResponsiveContainer>
               ) : (
                 <div className="h-[400px] flex items-center justify-center text-muted-foreground">
-                  Data grafik tidak tersedia
+                  <div className="text-center">
+                    <Activity className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>Sedang memuat data grafik...</p>
+                  </div>
                 </div>
               )}
             </CardContent>

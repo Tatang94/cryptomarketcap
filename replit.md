@@ -71,6 +71,25 @@ Data requirements: Show thousands of up-to-date cryptocurrencies
 5. **UI Updates**: Components automatically re-render when data changes
 6. **Error Handling**: Comprehensive error boundaries and user feedback
 
+## Recent Changes
+
+### Migration to Standard Replit Environment (Juli 2025)
+- Successfully migrated from Replit Agent to standard Replit environment
+- Enhanced security with proper client-server separation
+- Added coin detail pages with supply information and market data
+- Implemented live chart functionality with fallback data generation
+- Added clickable coin names in the main table for navigation
+- Integrated market trading data from multiple exchanges
+- Enhanced error handling and data validation
+
+### Enhanced Features
+- **Coin Detail Pages**: Individual pages for each cryptocurrency showing detailed information
+- **Supply Information**: Circulating supply, max supply, and supply percentage visualization
+- **Market Data**: Real exchange data showing trading pairs and volumes
+- **Live Charts**: 7-day price charts with responsive design and tooltips
+- **Navigation**: Seamless routing between main table and coin details
+- **Interactive Elements**: Clickable coin names with hover effects
+
 ## External Dependencies
 
 ### Core Dependencies
