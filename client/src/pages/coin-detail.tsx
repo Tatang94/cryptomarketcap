@@ -42,6 +42,50 @@ export default function CoinDetail() {
     retryDelay: 1000,
   });
 
+  const chartData = useMemo(() => {
+    if (!ohlcvData || ohlcvData.length === 0) {
+      // Generate sample data based on current price for demonstration
+      if (!ticker) return [];
+      
+      const currentPrice = ticker.quotes.USD.price;
+      const change24h = ticker.quotes.USD.percent_change_24h;
+      const days = 7;
+      
+      return Array.from({ length: days }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (days - 1 - i));
+        
+        // Generate price variation based on 24h change
+        const variation = (Math.random() - 0.5) * 0.1; // ±5% variation
+        const baseChange = change24h / 100 / days; // Distribute change over days
+        const priceMultiplier = 1 + baseChange * (i + 1) + variation;
+        
+        return {
+          time: format(date, 'dd/MM'),
+          price: currentPrice * priceMultiplier,
+          volume: ticker.quotes.USD.volume_24h * (0.8 + Math.random() * 0.4), // ±20% volume variation
+          marketCap: ticker.quotes.USD.market_cap * priceMultiplier,
+          high: currentPrice * priceMultiplier * 1.05,
+          low: currentPrice * priceMultiplier * 0.95,
+        };
+      });
+    }
+    
+    try {
+      return ohlcvData.map(item => ({
+        time: format(new Date(item.time_close), 'dd/MM'),
+        price: item.close,
+        volume: item.volume,
+        marketCap: item.market_cap,
+        high: item.high,
+        low: item.low,
+      }));
+    } catch (error) {
+      console.error('Error processing chart data:', error);
+      return [];
+    }
+  }, [ohlcvData, ticker]);
+
   if (isLoadingDetails || isLoadingTicker) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -88,51 +132,6 @@ export default function CoinDetail() {
   const change24h = quote.percent_change_24h;
   const changeColor = getChangeColor(change24h);
   const changeIcon = getChangeIcon(change24h);
-
-  const chartData = useMemo(() => {
-    if (!ohlcvData || ohlcvData.length === 0) {
-      // Generate sample data based on current price for demonstration
-      if (!ticker) return [];
-      
-      const currentPrice = ticker.quotes.USD.price;
-      const change24h = ticker.quotes.USD.percent_change_24h;
-      const days = 7;
-      
-      return Array.from({ length: days }, (_, i) => {
-        const date = new Date();
-        date.setDate(date.getDate() - (days - 1 - i));
-        
-        // Generate price variation based on 24h change
-        const variation = (Math.random() - 0.5) * 0.1; // ±5% variation
-        const baseChange = change24h / 100 / days; // Distribute change over days
-        const priceMultiplier = 1 + baseChange * (i + 1) + variation;
-        
-        return {
-          time: format(date, 'dd/MM'),
-          price: currentPrice * priceMultiplier,
-          volume: ticker.quotes.USD.volume_24h * (0.8 + Math.random() * 0.4), // ±20% volume variation
-          marketCap: ticker.quotes.USD.market_cap * priceMultiplier,
-          high: currentPrice * priceMultiplier * 1.05,
-          low: currentPrice * priceMultiplier * 0.95,
-        };
-      });
-    }
-    
-    try {
-      return ohlcvData.map(item => ({
-        time: format(new Date(item.time_close), 'dd/MM'),
-        price: item.close,
-        volume: item.volume,
-        marketCap: item.market_cap,
-        high: item.high,
-        low: item.low,
-      }));
-    } catch (error) {
-      console.error('Error processing chart data:', error);
-      return [];
-    }
-  }, [ohlcvData, ticker]);
-
   const supplyPercentage = ticker.max_supply ? (ticker.total_supply / ticker.max_supply) * 100 : 0;
 
   return (
@@ -389,9 +388,11 @@ export default function CoinDetail() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-medium">{formatCurrency(market.quotes.USD.price)}</div>
+                        <div className="font-medium">
+                          {market.quotes?.USD?.price ? formatCurrency(market.quotes.USD.price) : 'N/A'}
+                        </div>
                         <div className="text-sm text-muted-foreground">
-                          Vol: {formatCurrency(market.quotes.USD.volume_24h)}
+                          Vol: {market.quotes?.USD?.volume_24h ? formatCurrency(market.quotes.USD.volume_24h) : 'N/A'}
                         </div>
                       </div>
                       {market.market_url && (

@@ -100,16 +100,16 @@ export const marketSchema = z.object({
   quote_currency_id: z.string(),
   quote_currency_name: z.string(),
   market_url: z.string().optional(),
-  category: z.string(),
-  fee_type: z.string(),
-  outlier: z.boolean(),
-  reported_volume_24h_share: z.number(),
+  category: z.string().optional(),
+  fee_type: z.string().optional(),
+  outlier: z.boolean().optional(),
+  reported_volume_24h_share: z.number().optional(),
   quotes: z.object({
     USD: z.object({
-      price: z.number(),
-      volume_24h: z.number(),
+      price: z.number().optional(),
+      volume_24h: z.number().optional(),
     }),
-  }),
+  }).optional(),
 });
 
 export const exchangeSchema = z.object({
