@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams, Link } from "wouter";
+import { useParams, Link, useLocation } from "wouter";
 import { useMemo } from "react";
 import { ArrowLeft, ExternalLink, TrendingUp, TrendingDown, Activity, DollarSign, Users, Calendar, Hash, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,11 @@ interface CoinDetailParams {
 
 export default function CoinDetail() {
   const { id } = useParams<CoinDetailParams>();
+  const [, setLocation] = useLocation();
+
+  const handleBackClick = () => {
+    setLocation("/");
+  };
 
   const { data: coinDetails, isLoading: isLoadingDetails } = useQuery<CoinDetails>({
     queryKey: ['/api/coins', id],
@@ -117,12 +122,10 @@ export default function CoinDetail() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Cryptocurrency tidak ditemukan</h1>
-          <Link href="/">
-            <Button variant="outline">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Kembali ke Beranda
-            </Button>
-          </Link>
+          <Button variant="outline" onClick={handleBackClick}>
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Kembali ke Beranda
+          </Button>
         </div>
       </div>
     );
@@ -138,11 +141,10 @@ export default function CoinDetail() {
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <Link href="/">
-          <Button variant="outline" size="sm">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-        </Link>
+        <Button variant="outline" size="sm" onClick={handleBackClick}>
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Kembali
+        </Button>
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
             <span className="text-xl font-bold text-primary">
