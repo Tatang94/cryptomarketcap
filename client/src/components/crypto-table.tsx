@@ -169,14 +169,14 @@ export function CryptoTable() {
       {/* Table Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-green-600 via-blue-600 to-orange-600 bg-clip-text text-transparent">
             Harga Cryptocurrency Hari Ini (berdasarkan Market Cap)
           </h2>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          <p className="text-sm text-blue-700 mt-1">
             Semua harga dalam Rupiah (IDR) - Data real-time
           </p>
           {tickers && (
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-xs text-green-600 mt-1">
               Menampilkan {tickers.length} cryptocurrency (Halaman {currentPage} dari 2)
             </p>
           )}
@@ -193,21 +193,14 @@ export function CryptoTable() {
         </div>
       </div>
 
-      {/* Data Source Disclaimer */}
-      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
-        <AlertDescription className="text-sm text-blue-800 dark:text-blue-200">
-          <strong>Sumber Data:</strong> Data cryptocurrency ini berasal dari CoinPaprika API. 
-          Ranking dan harga mungkin sedikit berbeda dengan platform lain seperti CoinMarketCap 
-          karena perbedaan metodologi perhitungan dan waktu update data.
-        </AlertDescription>
-      </Alert>
+
 
       {/* Table */}
-      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+      <div className="bg-white rounded-lg shadow-lg overflow-hidden border-2 border-green-200">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50 dark:bg-gray-800">
+              <TableRow className="bg-gradient-to-r from-green-100 via-blue-100 to-orange-100">
                 <TableHead className="w-16">
                   <SortableHeader label="#" sortKey="rank" />
                 </TableHead>
@@ -238,36 +231,36 @@ export function CryptoTable() {
                 sortedData.map((crypto) => (
                   <TableRow 
                     key={crypto.id} 
-                    className="hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors"
+                    className="hover:bg-gradient-to-r hover:from-green-50 hover:via-blue-50 hover:to-orange-50 cursor-pointer transition-colors"
                   >
-                    <TableCell className="font-medium text-gray-900 dark:text-white">
+                    <TableCell className="font-medium text-blue-900">
                       {crypto.rank}
                     </TableCell>
                     <TableCell>
                       <Link href={`/coin/${crypto.id}`} className="block">
-                        <div className="flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg p-2 -m-2 transition-colors">
+                        <div className="flex items-center space-x-3 hover:bg-gradient-to-r hover:from-green-50 hover:via-blue-50 hover:to-orange-50 rounded-lg p-2 -m-2 transition-colors">
                           <div className="flex-shrink-0">
-                            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-green-500 via-blue-500 to-orange-500 flex items-center justify-center">
                               <span className="text-white font-bold text-xs">
                                 {crypto.symbol.charAt(0)}
                               </span>
                             </div>
                           </div>
                           <div>
-                            <div className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">
+                            <div className="text-sm font-medium text-blue-900 hover:text-green-600">
                               {crypto.name}
                             </div>
-                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                            <div className="text-sm text-blue-600 uppercase">
                               {crypto.symbol}
                             </div>
                           </div>
                           <div className="ml-auto">
-                            <Eye className="h-4 w-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" />
+                            <Eye className="h-4 w-4 text-orange-400 hover:text-green-600 transition-colors" />
                           </div>
                         </div>
                       </Link>
                     </TableCell>
-                    <TableCell className="text-right font-medium text-gray-900 dark:text-white">
+                    <TableCell className="text-right font-medium text-blue-900">
                       {formatCurrency(crypto.price)}
                     </TableCell>
                     <TableCell className={`text-right font-medium ${getChangeColor(crypto.change24h)}`}>

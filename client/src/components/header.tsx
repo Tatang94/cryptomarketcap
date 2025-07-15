@@ -30,16 +30,16 @@ export function Header() {
   ];
 
   return (
-    <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-green-100 via-blue-100 to-orange-100 border-b-2 border-gradient-to-r border-green-300 sticky top-0 z-50 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-6">
             <div className="flex items-center space-x-2">
-              <TrendingUp className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <TrendingUp className="h-8 w-8 text-green-600" />
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 via-blue-600 to-orange-600 bg-clip-text text-transparent">
                 CryptoMarket
               </h1>
-              <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+              <span className="text-xs text-green-700 bg-green-200 px-2 py-1 rounded">
                 IDR
               </span>
             </div>
@@ -48,7 +48,7 @@ export function Header() {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors"
+                  className="text-blue-700 hover:text-green-600 font-medium transition-colors"
                 >
                   {item.name}
                 </a>

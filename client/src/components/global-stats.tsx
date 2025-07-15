@@ -13,7 +13,7 @@ export function GlobalStatsSection() {
 
   if (isLoading) {
     return (
-      <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <section className="bg-gradient-to-r from-green-50 via-blue-50 to-orange-50 border-b-2 border-gradient-to-r border-green-200">
         <div className="container mx-auto px-4 py-6">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
@@ -31,9 +31,9 @@ export function GlobalStatsSection() {
 
   if (error || !globalStats) {
     return (
-      <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+      <section className="bg-gradient-to-r from-green-50 via-blue-50 to-orange-50 border-b-2 border-gradient-to-r border-green-200">
         <div className="container mx-auto px-4 py-6">
-          <div className="text-center text-red-600 dark:text-red-400">
+          <div className="text-center text-red-600">
             Unable to load global market data
           </div>
         </div>
@@ -58,13 +58,13 @@ export function GlobalStatsSection() {
   }) => (
     <div className="text-center md:text-left">
       <div className="flex items-center justify-center md:justify-start space-x-2 mb-1">
-        <Icon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-        <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
+        <Icon className="h-4 w-4 text-blue-600" />
+        <p className="text-sm text-blue-700">{label}</p>
       </div>
-      <p className="text-2xl font-bold text-gray-900 dark:text-white">{value}</p>
+      <p className="text-2xl font-bold text-blue-900">{value}</p>
       {change !== undefined && (
         <p className={`text-sm flex items-center justify-center md:justify-start space-x-1 ${
-          change >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+          change >= 0 ? 'text-green-600' : 'text-red-600'
         }`}>
           {change >= 0 ? (
             <TrendingUp className="h-3 w-3" />
@@ -72,14 +72,14 @@ export function GlobalStatsSection() {
             <TrendingDown className="h-3 w-3" />
           )}
           <span>{Math.abs(change).toFixed(2)}%</span>
-          {changeLabel && <span className="text-gray-500">({changeLabel})</span>}
+          {changeLabel && <span className="text-orange-600">({changeLabel})</span>}
         </p>
       )}
     </div>
   );
 
   return (
-    <section className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
+    <section className="bg-gradient-to-r from-green-50 via-blue-50 to-orange-50 border-b-2 border-gradient-to-r border-green-200">
       <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <StatCard
