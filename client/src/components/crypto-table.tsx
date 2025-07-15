@@ -50,7 +50,15 @@ export function CryptoTable() {
 
   const tableData = useMemo(() => {
     if (!tickers) return [];
-    return tickers.map(transformTickerToTableRow);
+    console.log('Tickers data:', tickers);
+    try {
+      const transformed = tickers.map(transformTickerToTableRow);
+      console.log('Transformed data:', transformed);
+      return transformed;
+    } catch (error) {
+      console.error('Error transforming ticker data:', error);
+      return [];
+    }
   }, [tickers]);
 
   const sortedData = useMemo(() => {
@@ -115,7 +123,11 @@ export function CryptoTable() {
     </TableRow>
   );
 
+  // Debug info
+  console.log('Component state:', { isLoading, error, tickers: !!tickers, tickersLength: tickers?.length });
+
   if (error) {
+    console.error('Error loading cryptocurrency data:', error);
     return (
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
