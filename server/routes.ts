@@ -68,9 +68,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       const data = await fetchFromCoinPaprika(`/coins/${id}`);
-      const validatedData = coinDetailsSchema.parse(data);
-      res.json(validatedData);
-    } catch (error) {
+      
+      // Try to validate with the schema first
+      try {
+        const validatedData = coinDetailsSchema.parse(data);
+        res.json(validatedData);
+      } catch (zodError) {
+        // If validation fails, create a fallback response from ticker data
+        console.log("Schema validation failed, using fallback data for:", id);
+        const tickerData = await fetchFromCoinPaprika(`/tickers/${id}`);
+        if (tickerData) {
+          const basicCoinData = {
+            id: tickerData.id,
+            name: tickerData.name,
+            symbol: tickerData.symbol,
+            rank: tickerData.rank,
+            is_new: false,
+            is_active: true,
+            type: "coin",
+            description: `${tickerData.name} adalah cryptocurrency yang saat ini berada di peringkat #${tickerData.rank}.`,
+            open_source: false,
+            hardware_wallet: false,
+            first_data_at: tickerData.first_data_at,
+            last_data_at: tickerData.last_updated,
+          };
+          res.json(basicCoinData);
+          return;
+        }
+        throw zodError;
+      }
+    } catch (error: any) {
       console.error("Error fetching coin details:", error);
       res.status(500).json({ error: "Failed to fetch cryptocurrency details" });
     }

@@ -228,36 +228,71 @@ export default function CoinDetail() {
       {/* Supply Information */}
       <Card className="mb-8">
         <CardHeader>
-          <CardTitle>
-            <Users className="h-5 w-5 inline mr-2" />
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
             Informasi Supply
           </CardTitle>
+          <CardDescription>
+            Distribusi dan ketersediaan token saat ini
+          </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <div className="text-sm text-muted-foreground mb-1">Circulating Supply</div>
-              <div className="text-xl font-bold">{formatNumber(ticker.total_supply)}</div>
-              <div className="text-sm text-muted-foreground">{ticker.symbol}</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Circulating Supply */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <span className="text-sm font-medium">Circulating Supply</span>
+                </div>
+                <Badge variant="secondary" className="text-xs">
+                  {ticker.max_supply ? `${supplyPercentage.toFixed(1)}%` : 'Tidak Terbatas'}
+                </Badge>
+              </div>
+              <div className="text-2xl font-bold">{formatNumber(ticker.total_supply)}</div>
+              <div className="text-sm text-muted-foreground">{ticker.symbol} yang beredar saat ini</div>
             </div>
-            <div>
-              <div className="text-sm text-muted-foreground mb-1">Max Supply</div>
-              <div className="text-xl font-bold">
-                {ticker.max_supply ? formatNumber(ticker.max_supply) : 'Tidak Terbatas'}
+
+            {/* Max Supply */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-gray-400 rounded-full"></div>
+                  <span className="text-sm font-medium">Max Supply</span>
+                </div>
+                <Badge variant={ticker.max_supply ? "outline" : "secondary"} className="text-xs">
+                  {ticker.max_supply ? 'Terbatas' : 'Unlimited'}
+                </Badge>
+              </div>
+              <div className="text-2xl font-bold">
+                {ticker.max_supply ? formatNumber(ticker.max_supply) : '∞'}
               </div>
               <div className="text-sm text-muted-foreground">
-                {ticker.max_supply ? ticker.symbol : 'Tidak ada batas maksimum'}
+                {ticker.max_supply ? 'Batas maksimum supply' : 'Tidak ada batas maksimum'}
               </div>
             </div>
+
+            {/* Supply Progress Bar */}
             {ticker.max_supply && (
-              <div>
-                <div className="text-sm text-muted-foreground mb-1">Persentase Supply</div>
-                <div className="text-xl font-bold">{supplyPercentage.toFixed(2)}%</div>
-                <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+              <div className="md:col-span-2 mt-4">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium">Progress Supply</span>
+                  <span className="text-sm text-muted-foreground">
+                    {formatNumber(ticker.total_supply)} / {formatNumber(ticker.max_supply)}
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
                   <div 
-                    className="bg-primary h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${supplyPercentage}%` }}
+                    className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500 ease-out"
+                    style={{ width: `${Math.min(supplyPercentage, 100)}%` }}
                   />
+                </div>
+                <div className="flex justify-between text-xs text-muted-foreground mt-1">
+                  <span>0%</span>
+                  <span className="font-medium text-blue-600 dark:text-blue-400">
+                    {supplyPercentage.toFixed(2)}%
+                  </span>
+                  <span>100%</span>
                 </div>
               </div>
             )}
