@@ -193,6 +193,15 @@ export function CryptoTable() {
         </div>
       </div>
 
+      {/* Data Source Disclaimer */}
+      <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+        <AlertDescription className="text-sm text-blue-800 dark:text-blue-200">
+          <strong>Sumber Data:</strong> Data cryptocurrency ini berasal dari CoinPaprika API. 
+          Ranking dan harga mungkin sedikit berbeda dengan platform lain seperti CoinMarketCap 
+          karena perbedaan metodologi perhitungan dan waktu update data.
+        </AlertDescription>
+      </Alert>
+
       {/* Table */}
       <div className="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
         <div className="overflow-x-auto">

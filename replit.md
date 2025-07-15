@@ -82,6 +82,7 @@ Data requirements: Show thousands of up-to-date cryptocurrencies
 - Integrated market trading data from multiple exchanges
 - Enhanced error handling and data validation
 - **COMPLETED: Market Trading Data** - Fixed and implemented working market data endpoint showing real exchange information
+- **COMPLETED: Data Source Transparency** - Added disclaimer explaining CoinPaprika API data differences from CoinMarketCap
 
 ### Enhanced Features
 - **Coin Detail Pages**: Individual pages for each cryptocurrency showing detailed information
