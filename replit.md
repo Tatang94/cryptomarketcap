@@ -38,18 +38,24 @@ Data requirements: Show thousands of up-to-date cryptocurrencies
 
 ### Data Layer
 - **API Client**: Custom fetch wrapper with error handling and authentication support
-- **Schema Validation**: Zod schemas for cryptocurrency data types (coins, tickers, global stats, OHLCV)
+- **Schema Validation**: Zod schemas for cryptocurrency data types (coins, tickers, global stats, OHLCV, markets, exchanges)
 - **Type Safety**: Shared TypeScript types between frontend and backend
 
 ### UI Components
-- **CryptoTable**: Paginated, sortable table displaying cryptocurrency data with real-time updates
+- **CryptoTable**: Paginated, sortable table displaying cryptocurrency data with clickable coin names for navigation
+- **CoinDetail**: Comprehensive coin detail page with supply information, market data, and live price charts
 - **GlobalStats**: Market overview section showing total market cap, volume, and Bitcoin dominance
 - **Header**: Navigation with search, theme toggle, and mobile-responsive design
 - **Theme Provider**: Context-based theme management with system preference detection
 
 ### Features
 - Real-time cryptocurrency price updates (30-second intervals)
-- Sortable and paginated cryptocurrency table
+- Sortable and paginated cryptocurrency table with clickable coin names
+- Detailed coin information pages showing:
+  - Supply information (circulating, max supply, percentage)
+  - Live price charts with 7-day historical data
+  - Market trading information from multiple exchanges
+  - Comprehensive coin statistics and metadata
 - Global market statistics dashboard
 - Responsive design with mobile navigation
 - Dark/light theme switching
@@ -68,10 +74,11 @@ Data requirements: Show thousands of up-to-date cryptocurrencies
 ## External Dependencies
 
 ### Core Dependencies
-- **CoinPaprika API**: Primary data source for cryptocurrency information
+- **CoinPaprika API**: Primary data source for cryptocurrency information including prices, market data, and historical charts
 - **Neon Database**: PostgreSQL provider (configured but not currently used)
 - **Radix UI**: Accessible component primitives
 - **Tailwind CSS**: Utility-first styling framework
+- **Recharts**: Chart library for live price visualization
 
 ### Development Tools
 - **Vite**: Development server and build tool

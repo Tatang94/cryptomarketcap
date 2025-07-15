@@ -91,9 +91,66 @@ export const ohlcvSchema = z.object({
   market_cap: z.number(),
 });
 
+export const marketSchema = z.object({
+  exchange_id: z.string(),
+  exchange_name: z.string(),
+  pair: z.string(),
+  base_currency_id: z.string(),
+  base_currency_name: z.string(),
+  quote_currency_id: z.string(),
+  quote_currency_name: z.string(),
+  market_url: z.string().optional(),
+  category: z.string(),
+  fee_type: z.string(),
+  outlier: z.boolean(),
+  reported_volume_24h_share: z.number(),
+  quotes: z.object({
+    USD: z.object({
+      price: z.number(),
+      volume_24h: z.number(),
+    }),
+  }),
+});
+
+export const exchangeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  active: z.boolean(),
+  website_status: z.boolean(),
+  api_status: z.boolean(),
+  message: z.string().optional(),
+  links: z.object({
+    website: z.array(z.string()).optional(),
+    twitter: z.array(z.string()).optional(),
+  }).optional(),
+  markets_data_fetched: z.boolean(),
+  adjusted_rank: z.number(),
+  reported_rank: z.number(),
+  currencies: z.number(),
+  markets: z.number(),
+  fiats: z.array(z.object({
+    name: z.string(),
+    symbol: z.string(),
+  })).optional(),
+  quotes: z.object({
+    USD: z.object({
+      reported_volume_24h: z.number(),
+      adjusted_volume_24h: z.number(),
+      reported_volume_7d: z.number(),
+      adjusted_volume_7d: z.number(),
+      reported_volume_30d: z.number(),
+      adjusted_volume_30d: z.number(),
+    }),
+  }),
+  last_updated: z.string(),
+});
+
 export type Coin = z.infer<typeof coinSchema>;
 export type CoinDetails = z.infer<typeof coinDetailsSchema>;
 export type Quote = z.infer<typeof quoteSchema>;
 export type Ticker = z.infer<typeof tickerSchema>;
 export type GlobalStats = z.infer<typeof globalStatsSchema>;
 export type OHLCV = z.infer<typeof ohlcvSchema>;
+export type Market = z.infer<typeof marketSchema>;
+export type Exchange = z.infer<typeof exchangeSchema>;

@@ -1,5 +1,6 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "wouter";
 import { Ticker } from "@shared/schema";
 import { transformTickerToTableRow, formatCurrency, formatNumber, getChangeColor, getChangeIcon } from "@/lib/api";
 import { CryptoTableRow, SortConfig } from "@/lib/types";
@@ -21,7 +22,8 @@ import {
   ChevronRight, 
   ArrowUpDown,
   TrendingUp,
-  TrendingDown
+  TrendingDown,
+  Eye
 } from "lucide-react";
 
 export function CryptoTable() {
@@ -233,23 +235,28 @@ export function CryptoTable() {
                       {crypto.rank}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center space-x-3">
-                        <div className="flex-shrink-0">
-                          <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                            <span className="text-white font-bold text-xs">
-                              {crypto.symbol.charAt(0)}
-                            </span>
+                      <Link href={`/coin/${crypto.id}`} className="block">
+                        <div className="flex items-center space-x-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg p-2 -m-2 transition-colors">
+                          <div className="flex-shrink-0">
+                            <div className="h-8 w-8 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                              <span className="text-white font-bold text-xs">
+                                {crypto.symbol.charAt(0)}
+                              </span>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400">
+                              {crypto.name}
+                            </div>
+                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                              {crypto.symbol}
+                            </div>
+                          </div>
+                          <div className="ml-auto">
+                            <Eye className="h-4 w-4 text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors" />
                           </div>
                         </div>
-                        <div>
-                          <div className="text-sm font-medium text-gray-900 dark:text-white">
-                            {crypto.name}
-                          </div>
-                          <div className="text-sm text-gray-500 dark:text-gray-400">
-                            {crypto.symbol}
-                          </div>
-                        </div>
-                      </div>
+                      </Link>
                     </TableCell>
                     <TableCell className="text-right font-medium text-gray-900 dark:text-white">
                       {formatCurrency(crypto.price)}

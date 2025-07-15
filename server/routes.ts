@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { z } from "zod";
-import { coinSchema, coinDetailsSchema, tickerSchema, globalStatsSchema, ohlcvSchema } from "@shared/schema";
+import { coinSchema, coinDetailsSchema, tickerSchema, globalStatsSchema, ohlcvSchema, marketSchema, exchangeSchema } from "@shared/schema";
 
 const COINPAPRIKA_API_KEY = process.env.COINPAPRIKA_API_KEY || "";
 const COINPAPRIKA_BASE_URL = "https://api.coinpaprika.com/v1";
@@ -130,6 +130,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error searching cryptocurrencies:", error);
       res.status(500).json({ error: "Failed to search cryptocurrencies" });
+    }
+  });
+
+  // Get markets for a specific cryptocurrency
+  app.get("/api/coins/:id/markets", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const data = await fetchFromCoinPaprika(`/coins/${id}/markets`);
+      const validatedData = z.array(marketSchema).parse(data);
+      res.json(validatedData);
+    } catch (error) {
+      console.error("Error fetching markets:", error);
+      res.status(500).json({ error: "Failed to fetch market data" });
+    }
+  });
+
+  // Get exchanges
+  app.get("/api/exchanges", async (req, res) => {
+    try {
+      const data = await fetchFromCoinPaprika("/exchanges");
+      const validatedData = z.array(exchangeSchema).parse(data);
+      res.json(validatedData);
+    } catch (error) {
+      console.error("Error fetching exchanges:", error);
+      res.status(500).json({ error: "Failed to fetch exchanges" });
+    }
+  });
+
+  // Get historical OHLCV data
+  app.get("/api/coins/:id/ohlcv/:period", async (req, res) => {
+    try {
+      const { id, period } = req.params;
+      const validPeriods = ["1h", "6h", "12h", "1d", "7d", "14d", "30d", "90d", "365d"];
+      
+      if (!validPeriods.includes(period)) {
+        return res.status(400).json({ error: "Invalid period. Use: 1h, 6h, 12h, 1d, 7d, 14d, 30d, 90d, 365d" });
+      }
+
+      const data = await fetchFromCoinPaprika(`/coins/${id}/ohlcv/historical?period=${period}`);
+      const validatedData = z.array(ohlcvSchema).parse(data);
+      res.json(validatedData);
+    } catch (error) {
+      console.error("Error fetching historical OHLCV data:", error);
+      res.status(500).json({ error: "Failed to fetch historical data" });
     }
   });
 
